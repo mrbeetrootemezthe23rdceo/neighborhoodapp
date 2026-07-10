@@ -21,6 +21,41 @@ type Item = {
   residents: { name: string; apartment_no: string } | null
 }
 
+function ItemCard({ item }: { item: Item }) {
+  return (
+    <a
+      href={`/item/${item.id}`}
+      className={`rounded-xl overflow-hidden block transition-colors ${
+        item.listing_type === 'request'
+          ? 'border-2 border-dashed border-gray-300 hover:border-gray-400'
+          : 'border border-gray-100 hover:border-gray-300'
+      }`}
+    >
+      <div className="h-32 bg-gray-100 flex items-center justify-center text-gray-300 text-xs relative">
+        {item.photo_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-100">
+            <CategoryIcon category={item.category} size={48} />
+          </div>
+        )}
+        {item.listing_type === 'request' && (
+          <span className="absolute top-2 left-2 bg-gray-900 text-white text-[11px] px-2.5 py-1 rounded-full">
+            Looking for
+          </span>
+        )}
+      </div>
+      <div className="p-4">
+        <p className="text-base font-semibold">{item.title}</p>
+        <p className="text-sm text-gray-500 mt-1">
+          {item.category} · {item.residents?.apartment_no ?? 'Unknown'}
+        </p>
+      </div>
+    </a>
+  )
+}
+
 export default function HomePage() {
   const [checkingAuth, setCheckingAuth] = useState(true)
   const [items, setItems] = useState<Item[]>([])
@@ -61,6 +96,9 @@ export default function HomePage() {
     return matchesSearch && matchesCategory
   })
 
+  const offerItems = filteredItems.filter((item) => item.listing_type === 'offer')
+  const requestItems = filteredItems.filter((item) => item.listing_type === 'request')
+
   if (checkingAuth) {
     return <div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>
   }
@@ -89,41 +127,29 @@ export default function HomePage() {
       ) : filteredItems.length === 0 ? (
         <p className="text-gray-400 text-base">No items found. Try a different search or category.</p>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
-          {filteredItems.map((item) => (
-            <a
-              key={item.id}
-              href={`/item/${item.id}`}
-              className={`rounded-xl overflow-hidden block transition-colors ${
-                item.listing_type === 'request'
-                  ? 'border-2 border-dashed border-gray-300 hover:border-gray-400'
-                  : 'border border-gray-100 hover:border-gray-300'
-              }`}
-            >
-              <div className="h-32 bg-gray-100 flex items-center justify-center text-gray-300 text-xs relative">
-                {item.photo_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                    <CategoryIcon category={item.category} size={48} />
-                  </div>
-                )}
-                {item.listing_type === 'request' && (
-                  <span className="absolute top-2 left-2 bg-gray-900 text-white text-[11px] px-2.5 py-1 rounded-full">
-                    Looking for
-                  </span>
-                )}
+        <>
+          {requestItems.length > 0 && (
+            <div className="mb-10">
+              <h2 className="text-xl font-bold mb-4">Looking for</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
+                {requestItems.map((item) => (
+                  <ItemCard key={item.id} item={item} />
+                ))}
               </div>
-              <div className="p-4">
-                <p className="text-base font-semibold">{item.title}</p>
-                <p className="text-sm text-gray-500 mt-1">
-                  {item.category} · {item.residents?.apartment_no ?? 'Unknown'}
-                </p>
+            </div>
+          )}
+
+          {offerItems.length > 0 && (
+            <div className="mb-10">
+              <h2 className="text-xl font-bold mb-4">Available to borrow</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
+                {offerItems.map((item) => (
+                  <ItemCard key={item.id} item={item} />
+                ))}
               </div>
-            </a>
-          ))}
-        </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   )
