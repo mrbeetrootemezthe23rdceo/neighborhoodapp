@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
+import AppHeader from '@/components/AppHeader'
+import CategoryIcon from '@/components/CategoryIcon'
 
 const CATEGORIES = [
   'Power Tools', 'Hand Tools', 'Garden', 'Kitchen',
@@ -26,7 +28,6 @@ export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const router = useRouter()
 
-  // Gate the page: only logged-in residents get past this
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       if (!data.session) {
@@ -53,11 +54,6 @@ export default function HomePage() {
     loadItems()
   }, [checkingAuth])
 
-  async function handleLogout() {
-    await supabase.auth.signOut()
-    router.push('/login')
-  }
-
   const filteredItems = items.filter((item) => {
     const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase())
     const matchesCategory = !activeCategory || item.category === activeCategory
@@ -69,64 +65,43 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white px-6 py-6 max-w-5xl mx-auto">
-      <div className="flex items-center gap-4 mb-8">
-        <h1 className="text-xl font-bold whitespace-nowrap">ToolShare</h1>
-        <input
-          type="text"
-          placeholder="Search for a drill, ladder, tent..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 rounded-full bg-gray-100 px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <a href="/list-item" className="text-sm bg-black text-white rounded-full px-4 py-2 whitespace-nowrap">+ List item</a>
-        <a href="/messages" className="text-sm text-gray-500 whitespace-nowrap">Messages</a>
-        <button onClick={handleLogout} className="text-sm text-gray-500 whitespace-nowrap">
-          Log out
-        </button>
-      </div>
+    <div className="min-h-screen bg-white px-10 py-8 max-w-7xl mx-auto">
+      <AppHeader search={search} onSearchChange={setSearch} />
 
-      <div className="flex gap-3 overflow-x-auto pb-2 mb-8">
-        <button
-          onClick={() => setActiveCategory(null)}
-          className={`rounded-full px-4 py-2 text-sm whitespace-nowrap border ${
-            activeCategory === null ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600'
-          }`}
-        >
-          All
-        </button>
+      <div className="grid grid-cols-4 sm:grid-cols-8 gap-5 mb-10">
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`rounded-full px-4 py-2 text-sm whitespace-nowrap border ${
-              activeCategory === cat ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600'
-            }`}
+            onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
+            className="flex flex-col items-center gap-2"
           >
-            {cat}
+            <div className={activeCategory === cat ? 'ring-2 ring-black rounded-2xl' : ''}>
+              <CategoryIcon category={cat} />
+            </div>
+            <span className="text-xs text-gray-600 text-center leading-tight">{cat}</span>
           </button>
         ))}
       </div>
 
       {loadingItems ? (
-        <p className="text-gray-400 text-sm">Loading items...</p>
+        <p className="text-gray-400 text-base">Loading items...</p>
       ) : filteredItems.length === 0 ? (
-        <p className="text-gray-400 text-sm">No items found. Try a different search or category.</p>
+        <p className="text-gray-400 text-base">No items found. Try a different search or category.</p>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
           {filteredItems.map((item) => (
-            <a key={item.id} href={`/item/${item.id}`} className="rounded-xl border border-gray-100 overflow-hidden">
-              <div className="h-24 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">
+            <a key={item.id} href={`/item/${item.id}`} className="rounded-xl border border-gray-100 overflow-hidden block hover:border-gray-300 transition-colors">
+              <div className="h-32 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">
                 {item.photo_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
                 ) : (
-                  'No photo'
+                  <CategoryIcon category={item.category} size={48} />
                 )}
               </div>
-              <div className="p-3">
-                <p className="text-sm font-medium">{item.title}</p>
-                <p className="text-xs text-gray-500 mt-0.5">
+              <div className="p-4">
+                <p className="text-base font-semibold">{item.title}</p>
+                <p className="text-sm text-gray-500 mt-1">
                   {item.category} · {item.residents?.apartment_no ?? 'Unknown'}
                 </p>
               </div>

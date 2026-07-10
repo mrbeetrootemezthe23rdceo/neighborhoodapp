@@ -87,27 +87,27 @@ export default function ThreadPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white px-6 py-8 max-w-md mx-auto flex flex-col">
-      <button onClick={() => router.push('/messages')} className="text-sm text-gray-500 mb-4">
+    <div className="min-h-screen bg-white px-8 py-10 max-w-lg mx-auto flex flex-col">
+      <button onClick={() => router.push('/messages')} className="text-base text-gray-500 mb-5">
         ← All messages
       </button>
 
-      <h1 className="text-lg font-bold mb-4">
+      <h1 className="text-xl font-bold mb-5">
         {conversation?.items?.title ?? 'Conversation'}
       </h1>
 
-      <div className="flex-1 space-y-3 mb-4">
+      <div className="flex-1 space-y-4 mb-5">
         {messages.map((msg) => {
           const isMine = msg.sender_id === currentUserId
           return (
             <div
               key={msg.id}
-              className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm ${
+              className={`max-w-[75%] rounded-2xl px-5 py-3 text-base ${
                 isMine ? 'bg-black text-white ml-auto' : 'bg-gray-100 text-gray-800'
               }`}
             >
               {!isMine && (
-                <p className="text-xs text-gray-500 mb-0.5">{msg.residents?.name ?? 'Neighbor'}</p>
+                <p className="text-sm text-gray-500 mb-1">{msg.residents?.name ?? 'Neighbor'}</p>
               )}
               <p>{msg.body}</p>
             </div>
@@ -115,18 +115,18 @@ export default function ThreadPage() {
         })}
       </div>
 
-      <form onSubmit={handleSend} className="flex gap-2">
+      <form onSubmit={handleSend} className="flex gap-3">
         <input
           type="text"
           placeholder="Type a message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          className="flex-1 rounded-full border border-gray-200 px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="flex-1 rounded-full border border-gray-200 px-6 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         <button
           type="submit"
           disabled={sending}
-          className="rounded-full bg-black text-white px-5 py-2.5 text-sm font-medium disabled:opacity-50"
+          className="rounded-full bg-black text-white px-6 py-3 text-base font-medium disabled:opacity-50"
         >
           Send
         </button>

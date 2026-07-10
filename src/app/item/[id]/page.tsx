@@ -109,12 +109,12 @@ export default function ItemDetailPage() {
   const isOwnItem = item.owner_id === currentUserId
 
   return (
-    <div className="min-h-screen bg-white px-6 py-8 max-w-md mx-auto">
-      <button onClick={() => router.push('/')} className="text-sm text-gray-500 mb-4">
+    <div className="min-h-screen bg-white px-8 py-10 max-w-lg mx-auto">
+      <button onClick={() => router.push('/')} className="text-base text-gray-500 mb-5">
         ← Back
       </button>
 
-      <div className="rounded-2xl overflow-hidden bg-gray-100 h-56 flex items-center justify-center text-gray-300 text-sm mb-4">
+      <div className="rounded-2xl overflow-hidden bg-gray-100 h-72 flex items-center justify-center text-gray-300 text-base mb-5">
         {item.photo_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
@@ -123,35 +123,35 @@ export default function ItemDetailPage() {
         )}
       </div>
 
-      <h1 className="text-xl font-bold">{item.title}</h1>
-      <p className="text-sm text-gray-500 mt-1">
+      <h1 className="text-2xl font-bold">{item.title}</h1>
+      <p className="text-base text-gray-500 mt-1.5">
         {item.category} · {item.condition ?? 'Condition not specified'}
       </p>
-      <p className="text-sm text-gray-500 mt-1">
+      <p className="text-base text-gray-500 mt-1.5">
         Owned by {item.residents?.name ?? 'Unknown'}, apt {item.residents?.apartment_no ?? '?'}
       </p>
 
       {item.description && (
-        <p className="text-sm text-gray-700 mt-4">{item.description}</p>
+        <p className="text-base text-gray-700 mt-5">{item.description}</p>
       )}
 
       {isOwnItem ? (
-        <p className="text-sm text-gray-400 mt-6">This is your own listing.</p>
+        <p className="text-base text-gray-400 mt-7">This is your own listing.</p>
       ) : (
-        <form onSubmit={handleRequestToBorrow} className="mt-6 space-y-3">
+        <form onSubmit={handleRequestToBorrow} className="mt-7 space-y-4">
           <textarea
             placeholder="Say hi and let them know when you'd like to borrow it"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             required
             rows={3}
-            className="w-full rounded-2xl border border-gray-200 px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full rounded-2xl border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             type="submit"
             disabled={sending}
-            className="w-full rounded-full bg-black text-white py-3 text-sm font-medium disabled:opacity-50"
+            className="w-full rounded-full bg-black text-white py-3.5 text-base font-medium disabled:opacity-50"
           >
             {sending ? 'Sending...' : 'Request to borrow'}
           </button>

@@ -77,18 +77,18 @@ export default function ListItemPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white px-6 py-8 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-1">List an item</h1>
-      <p className="text-gray-500 mb-6 text-sm">Share something with your neighbors</p>
+    <div className="min-h-screen bg-white px-8 py-10 max-w-lg mx-auto">
+      <h1 className="text-3xl font-bold mb-2">List an item</h1>
+      <p className="text-gray-500 mb-8 text-base">Share something with your neighbors</p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <input
           type="text"
           placeholder="Item name (e.g. Cordless drill)"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="w-full rounded-full border border-gray-200 px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full rounded-full border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
         <textarea
@@ -96,13 +96,13 @@ export default function ListItemPage() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
-          className="w-full rounded-2xl border border-gray-200 px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full rounded-2xl border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="w-full rounded-full border border-gray-200 px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full rounded-full border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           {CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>{cat}</option>
@@ -112,7 +112,7 @@ export default function ListItemPage() {
         <select
           value={condition}
           onChange={(e) => setCondition(e.target.value)}
-          className="w-full rounded-full border border-gray-200 px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full rounded-full border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           {CONDITIONS.map((c) => (
             <option key={c} value={c}>{c}</option>
@@ -120,12 +120,12 @@ export default function ListItemPage() {
         </select>
 
         <div>
-          <label className="block text-sm text-gray-500 mb-2">Photo (optional)</label>
+          <label className="block text-base text-gray-500 mb-2">Photo (optional)</label>
           <input
             type="file"
             accept="image/*"
             onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
-            className="text-sm"
+            className="text-base"
           />
         </div>
 
@@ -134,7 +134,7 @@ export default function ListItemPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-full bg-black text-white py-3 text-sm font-medium disabled:opacity-50"
+          className="w-full rounded-full bg-black text-white py-3.5 text-base font-medium disabled:opacity-50"
         >
           {loading ? 'Listing item...' : 'List item'}
         </button>
