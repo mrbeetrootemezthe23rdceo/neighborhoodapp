@@ -29,10 +29,10 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#FFE9D6' }}>
       <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-2">Create your account</h1>
-        <p className="text-gray-500 mb-8 text-base">Join your building&apos;s tool-sharing group</p>
+        <h1 className="text-3xl font-bold mb-2" style={{ color: '#7C2D12' }}>Create your account</h1>
+        <p className="mb-8 text-base" style={{ color: '#9A3412' }}>Join your building&apos;s tool-sharing group</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -41,7 +41,8 @@ export default function SignupPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full rounded-full border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+            style={{ border: '1px solid #FED7AA' }}
           />
           <input
             type="password"
@@ -50,23 +51,25 @@ export default function SignupPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
             minLength={6}
-            className="w-full rounded-full border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+            style={{ border: '1px solid #FED7AA' }}
           />
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && <p className="text-red-600 text-sm">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-full bg-black text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full rounded-full text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            style={{ backgroundColor: '#EA580C' }}
           >
             {loading ? 'Creating account...' : 'Sign up'}
           </button>
         </form>
 
-        <p className="text-base text-gray-500 mt-6">
+        <p className="text-base mt-6" style={{ color: '#9A3412' }}>
           Already have an account?{' '}
-          <a href="/login" className="text-blue-600 font-medium">Log in</a>
+          <a href="/login" className="font-medium" style={{ color: '#C2410C' }}>Log in</a>
         </p>
       </div>
     </div>

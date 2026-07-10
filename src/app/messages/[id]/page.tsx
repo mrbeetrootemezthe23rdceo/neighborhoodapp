@@ -87,12 +87,12 @@ export default function ThreadPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white px-8 py-10 max-w-lg mx-auto flex flex-col">
-      <button onClick={() => router.push('/messages')} className="text-base text-gray-500 mb-5 cursor-pointer">
+    <div className="min-h-screen px-8 py-10 max-w-lg mx-auto flex flex-col" style={{ background: '#FFE9D6' }}>
+      <button onClick={() => router.push('/messages')} className="text-base mb-5 cursor-pointer" style={{ color: '#9A3412' }}>
         ← All messages
       </button>
 
-      <h1 className="text-xl font-bold mb-5">
+      <h1 className="text-xl font-bold mb-5" style={{ color: '#7C2D12' }}>
         {conversation?.items?.title ?? 'Conversation'}
       </h1>
 
@@ -102,12 +102,13 @@ export default function ThreadPage() {
           return (
             <div
               key={msg.id}
-              className={`max-w-[75%] rounded-2xl px-5 py-3 text-base ${
-                isMine ? 'bg-black text-white ml-auto' : 'bg-gray-100 text-gray-800'
-              }`}
+              className="max-w-[75%] rounded-2xl px-5 py-3 text-base"
+              style={isMine
+                ? { backgroundColor: '#EA580C', color: 'white', marginLeft: 'auto' }
+                : { backgroundColor: 'white', color: '#431407' }}
             >
               {!isMine && (
-                <p className="text-sm text-gray-500 mb-1">{msg.residents?.name ?? 'Neighbor'}</p>
+                <p className="text-sm mb-1" style={{ color: '#9A3412' }}>{msg.residents?.name ?? 'Neighbor'}</p>
               )}
               <p>{msg.body}</p>
             </div>
@@ -121,12 +122,14 @@ export default function ThreadPage() {
           placeholder="Type a message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          className="flex-1 rounded-full border border-gray-200 px-6 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="flex-1 rounded-full bg-white px-6 py-3 text-base focus:outline-none focus:ring-2"
+          style={{ border: '1px solid #FED7AA' }}
         />
         <button
           type="submit"
           disabled={sending}
-          className="rounded-full bg-black text-white px-6 py-3 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          className="rounded-full text-white px-6 py-3 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          style={{ backgroundColor: '#EA580C' }}
         >
           Send
         </button>

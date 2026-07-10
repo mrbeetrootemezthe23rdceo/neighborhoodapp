@@ -19,7 +19,7 @@ export default function AppHeader({
 
   return (
     <div className="flex items-center gap-4 mb-10">
-      <a href="/" className="text-2xl font-bold whitespace-nowrap">ToolShare</a>
+      <a href="/" className="text-2xl font-bold whitespace-nowrap" style={{ color: '#7C2D12' }}>ToolShare</a>
 
       {onSearchChange !== undefined && (
         <input
@@ -27,17 +27,22 @@ export default function AppHeader({
           placeholder="Search for a drill, ladder, tent..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="flex-1 rounded-full bg-gray-100 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="flex-1 rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+          style={{ color: '#B45309' }}
         />
       )}
 
-      <a href="/list-item" className="text-base bg-black text-white rounded-full px-6 py-3.5 whitespace-nowrap">
+      <a
+        href="/list-item"
+        className="text-base text-white rounded-full px-6 py-3.5 whitespace-nowrap cursor-pointer"
+        style={{ backgroundColor: '#EA580C' }}
+      >
         + List item
       </a>
-      <a href="/messages" className="text-base text-gray-500 whitespace-nowrap">
+      <a href="/messages" className="text-base whitespace-nowrap" style={{ color: '#9A3412' }}>
         Messages
       </a>
-      <button onClick={handleLogout} className="text-base text-gray-500 whitespace-nowrap cursor-pointer">
+      <button onClick={handleLogout} className="text-base whitespace-nowrap cursor-pointer" style={{ color: '#9A3412' }}>
         Log out
       </button>
     </div>

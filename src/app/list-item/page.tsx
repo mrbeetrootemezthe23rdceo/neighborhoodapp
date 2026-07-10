@@ -79,28 +79,26 @@ export default function ListItemPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white px-8 py-10 max-w-lg mx-auto">
-      <h1 className="text-3xl font-bold mb-2">List an item</h1>
-      <p className="text-gray-500 mb-8 text-base">Share something, or ask for something you need</p>
+    <div className="min-h-screen px-8 py-10 max-w-lg mx-auto" style={{ background: '#FFE9D6' }}>
+      <h1 className="text-3xl font-bold mb-2" style={{ color: '#7C2D12' }}>List an item</h1>
+      <p className="mb-8 text-base" style={{ color: '#9A3412' }}>Share something, or ask for something you need</p>
 
-      <div className="flex gap-2 mb-7 bg-gray-100 rounded-full p-1">
+      <div className="flex gap-2 mb-7 bg-white rounded-full p-1">
         <button
           type="button"
           onClick={() => setListingType('offer')}
-          className={`flex-1 rounded-full py-2.5 text-sm font-medium cursor-pointer ${
-            listingType === 'offer' ? 'bg-white shadow-sm' : 'text-gray-500'
-          }`}
+          className="flex-1 rounded-full py-2.5 text-sm font-medium cursor-pointer"
+          style={listingType === 'offer' ? { backgroundColor: '#FFF3E8', color: '#9A3412' } : { color: '#B45309' }}
         >
           I have this to lend
         </button>
         <button
           type="button"
           onClick={() => setListingType('request')}
-          className={`flex-1 rounded-full py-2.5 text-sm font-medium cursor-pointer ${
-            listingType === 'request' ? 'bg-white shadow-sm' : 'text-gray-500'
-          }`}
+          className="flex-1 rounded-full py-2.5 text-sm font-medium cursor-pointer"
+          style={listingType === 'request' ? { backgroundColor: '#FFF3E8', color: '#9A3412' } : { color: '#B45309' }}
         >
-          I'm looking for this
+          I&apos;m looking for this
         </button>
       </div>
 
@@ -111,7 +109,8 @@ export default function ListItemPage() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="w-full rounded-full border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+          style={{ border: '1px solid #FED7AA' }}
         />
 
         <textarea
@@ -119,13 +118,15 @@ export default function ListItemPage() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
-          className="w-full rounded-2xl border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full rounded-2xl bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+          style={{ border: '1px solid #FED7AA' }}
         />
 
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="w-full rounded-full border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+          style={{ border: '1px solid #FED7AA' }}
         >
           {CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>{cat}</option>
@@ -137,7 +138,8 @@ export default function ListItemPage() {
             <select
               value={condition}
               onChange={(e) => setCondition(e.target.value)}
-              className="w-full rounded-full border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+              style={{ border: '1px solid #FED7AA' }}
             >
               {CONDITIONS.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -145,23 +147,25 @@ export default function ListItemPage() {
             </select>
 
             <div>
-              <label className="block text-base text-gray-500 mb-2">Photo (optional)</label>
+              <label className="block text-base mb-2" style={{ color: '#9A3412' }}>Photo (optional)</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
-                className="text-base"
+                className="text-base file:cursor-pointer file:mr-3 file:rounded-full file:border-0 file:bg-white file:px-5 file:py-2.5 file:text-sm file:font-medium"
+                style={{ color: '#9A3412' }}
               />
             </div>
           </>
         )}
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-full bg-black text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          className="w-full rounded-full text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          style={{ backgroundColor: '#EA580C' }}
         >
           {loading ? 'Posting...' : listingType === 'offer' ? 'List item' : 'Post request'}
         </button>

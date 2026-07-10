@@ -110,12 +110,12 @@ export default function ItemDetailPage() {
   const isOwnItem = item.owner_id === currentUserId
 
   return (
-    <div className="min-h-screen bg-white px-8 py-10 max-w-lg mx-auto">
-      <button onClick={() => router.push('/')} className="text-base text-gray-500 mb-5 cursor-pointer">
+    <div className="min-h-screen px-8 py-10 max-w-lg mx-auto" style={{ background: '#FFE9D6' }}>
+      <button onClick={() => router.push('/')} className="text-base mb-5 cursor-pointer" style={{ color: '#9A3412' }}>
         ← Back
       </button>
 
-      <div className="rounded-2xl overflow-hidden bg-gray-100 h-72 flex items-center justify-center text-gray-300 text-base mb-5">
+      <div className="rounded-2xl overflow-hidden h-72 flex items-center justify-center text-base mb-5" style={{ background: '#FFF3E8', color: '#C2410C' }}>
         {item.photo_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
@@ -124,20 +124,20 @@ export default function ItemDetailPage() {
         )}
       </div>
 
-      <h1 className="text-2xl font-bold">{item.title}</h1>
-      <p className="text-base text-gray-500 mt-1.5">
+      <h1 className="text-2xl font-bold" style={{ color: '#7C2D12' }}>{item.title}</h1>
+      <p className="text-base mt-1.5" style={{ color: '#9A3412' }}>
         {item.category}{item.condition ? ` · ${item.condition}` : ''}
       </p>
-      <p className="text-base text-gray-500 mt-1.5">
+      <p className="text-base mt-1.5" style={{ color: '#9A3412' }}>
         {item.listing_type === 'request' ? 'Requested by' : 'Owned by'} {item.residents?.name ?? 'Unknown'}, apt {item.residents?.apartment_no ?? '?'}
       </p>
 
       {item.description && (
-        <p className="text-base text-gray-700 mt-5">{item.description}</p>
+        <p className="text-base mt-5" style={{ color: '#431407' }}>{item.description}</p>
       )}
 
       {isOwnItem ? (
-        <p className="text-base text-gray-400 mt-7">This is your own listing.</p>
+        <p className="text-base mt-7" style={{ color: '#B45309' }}>This is your own listing.</p>
       ) : (
         <form onSubmit={handleRequestToBorrow} className="mt-7 space-y-4">
           <textarea
@@ -146,13 +146,15 @@ export default function ItemDetailPage() {
             onChange={(e) => setMessage(e.target.value)}
             required
             rows={3}
-            className="w-full rounded-2xl border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full rounded-2xl bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+            style={{ border: '1px solid #FED7AA' }}
           />
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && <p className="text-red-600 text-sm">{error}</p>}
           <button
             type="submit"
             disabled={sending}
-            className="w-full rounded-full bg-black text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full rounded-full text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            style={{ backgroundColor: '#EA580C' }}
           >
             {sending ? 'Sending...' : item.listing_type === 'request' ? 'I have one to offer' : 'Request to borrow'}
           </button>
