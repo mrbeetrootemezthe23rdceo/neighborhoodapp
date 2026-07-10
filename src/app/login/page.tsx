@@ -1,0 +1,84 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabaseClient'
+
+export default function LoginPage() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+
+    if (error) {
+      setLoading(false)
+      setError(error.message)
+      return
+    }
+
+    const { data: resident } = await supabase
+      .from('residents')
+      .select('name')
+      .eq('id', data.user.id)
+      .single()
+
+    setLoading(false)
+
+    if (!resident?.name) {
+      router.push('/complete-profile')
+    } else {
+      router.push('/')
+    }
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+      <div className="w-full max-w-sm">
+        <h1 className="text-2xl font-bold mb-1">Welcome back</h1>
+        <p className="text-gray-500 mb-6 text-sm">Log in to browse and lend tools</p>
+
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full rounded-full border border-gray-200 px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full rounded-full border border-gray-200 px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-full bg-black text-white py-3 text-sm font-medium disabled:opacity-50"
+          >
+            {loading ? 'Logging in...' : 'Log in'}
+          </button>
+        </form>
+
+        <p className="text-sm text-gray-500 mt-4">
+          No account yet?{' '}
+          <a href="/signup" className="text-blue-600 font-medium">Sign up</a>
+        </p>
+      </div>
+    </div>
+  )
+}
