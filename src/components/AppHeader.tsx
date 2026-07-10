@@ -37,7 +37,7 @@ export default function AppHeader({
       <a href="/messages" className="text-base text-gray-500 whitespace-nowrap">
         Messages
       </a>
-      <button onClick={handleLogout} className="text-base text-gray-500 whitespace-nowrap">
+      <button onClick={handleLogout} className="text-base text-gray-500 whitespace-nowrap cursor-pointer">
         Log out
       </button>
     </div>

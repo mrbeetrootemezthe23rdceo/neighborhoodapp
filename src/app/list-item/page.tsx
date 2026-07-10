@@ -134,7 +134,7 @@ export default function ListItemPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-full bg-black text-white py-3.5 text-base font-medium disabled:opacity-50"
+          className="w-full rounded-full bg-black text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           {loading ? 'Listing item...' : 'List item'}
         </button>

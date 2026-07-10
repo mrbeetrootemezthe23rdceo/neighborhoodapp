@@ -50,7 +50,7 @@ export default function MessagesListPage() {
 
   return (
     <div className="min-h-screen bg-white px-8 py-10 max-w-lg mx-auto">
-      <button onClick={() => router.push('/')} className="text-base text-gray-500 mb-5">
+      <button onClick={() => router.push('/')} className="text-base text-gray-500 mb-5 cursor-pointer">
         ← Back
       </button>
 

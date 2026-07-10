@@ -110,7 +110,7 @@ export default function ItemDetailPage() {
 
   return (
     <div className="min-h-screen bg-white px-8 py-10 max-w-lg mx-auto">
-      <button onClick={() => router.push('/')} className="text-base text-gray-500 mb-5">
+      <button onClick={() => router.push('/')} className="text-base text-gray-500 mb-5 cursor-pointer">
         ← Back
       </button>
 
@@ -151,7 +151,7 @@ export default function ItemDetailPage() {
           <button
             type="submit"
             disabled={sending}
-            className="w-full rounded-full bg-black text-white py-3.5 text-base font-medium disabled:opacity-50"
+            className="w-full rounded-full bg-black text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {sending ? 'Sending...' : 'Request to borrow'}
           </button>

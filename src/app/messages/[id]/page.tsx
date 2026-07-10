@@ -88,7 +88,7 @@ export default function ThreadPage() {
 
   return (
     <div className="min-h-screen bg-white px-8 py-10 max-w-lg mx-auto flex flex-col">
-      <button onClick={() => router.push('/messages')} className="text-base text-gray-500 mb-5">
+      <button onClick={() => router.push('/messages')} className="text-base text-gray-500 mb-5 cursor-pointer">
         ← All messages
       </button>
 
@@ -126,7 +126,7 @@ export default function ThreadPage() {
         <button
           type="submit"
           disabled={sending}
-          className="rounded-full bg-black text-white px-6 py-3 text-base font-medium disabled:opacity-50"
+          className="rounded-full bg-black text-white px-6 py-3 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           Send
         </button>

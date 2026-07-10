@@ -73,7 +73,7 @@ export default function HomePage() {
           <button
             key={cat}
             onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-            className="flex flex-col items-center gap-2"
+            className="flex flex-col items-center gap-2 cursor-pointer"
           >
             <div className={activeCategory === cat ? 'ring-2 ring-black rounded-2xl' : ''}>
               <CategoryIcon category={cat} />
