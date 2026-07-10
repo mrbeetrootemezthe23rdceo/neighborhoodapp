@@ -12,6 +12,7 @@ type Item = {
   condition: string | null
   photo_url: string | null
   owner_id: string
+  listing_type: 'offer' | 'request'
   residents: { name: string; apartment_no: string } | null
 }
 
@@ -37,7 +38,7 @@ export default function ItemDetailPage() {
 
       const { data, error } = await supabase
         .from('items')
-        .select('id, title, description, category, condition, photo_url, owner_id, residents(name, apartment_no)')
+        .select('id, title, description, category, condition, photo_url, owner_id, listing_type, residents(name, apartment_no)')
         .eq('id', id)
         .single()
 
@@ -125,10 +126,10 @@ export default function ItemDetailPage() {
 
       <h1 className="text-2xl font-bold">{item.title}</h1>
       <p className="text-base text-gray-500 mt-1.5">
-        {item.category} · {item.condition ?? 'Condition not specified'}
+        {item.category}{item.condition ? ` · ${item.condition}` : ''}
       </p>
       <p className="text-base text-gray-500 mt-1.5">
-        Owned by {item.residents?.name ?? 'Unknown'}, apt {item.residents?.apartment_no ?? '?'}
+        {item.listing_type === 'request' ? 'Requested by' : 'Owned by'} {item.residents?.name ?? 'Unknown'}, apt {item.residents?.apartment_no ?? '?'}
       </p>
 
       {item.description && (
@@ -140,7 +141,7 @@ export default function ItemDetailPage() {
       ) : (
         <form onSubmit={handleRequestToBorrow} className="mt-7 space-y-4">
           <textarea
-            placeholder="Say hi and let them know when you'd like to borrow it"
+            placeholder={item.listing_type === 'request' ? "Let them know you have one to lend" : "Say hi and let them know when you'd like to borrow it"}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             required
@@ -153,7 +154,7 @@ export default function ItemDetailPage() {
             disabled={sending}
             className="w-full rounded-full bg-black text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
-            {sending ? 'Sending...' : 'Request to borrow'}
+            {sending ? 'Sending...' : item.listing_type === 'request' ? 'I have one to offer' : 'Request to borrow'}
           </button>
         </form>
       )}

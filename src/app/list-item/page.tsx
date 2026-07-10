@@ -12,6 +12,7 @@ const CATEGORIES = [
 const CONDITIONS = ['Like new', 'Good', 'Fair']
 
 export default function ListItemPage() {
+  const [listingType, setListingType] = useState<'offer' | 'request'>('offer')
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState(CATEGORIES[0])
@@ -37,7 +38,7 @@ export default function ListItemPage() {
     const userId = userData.user.id
     let photoUrl: string | null = null
 
-    if (photoFile) {
+    if (listingType === 'offer' && photoFile) {
       const filePath = `${userId}/${Date.now()}-${photoFile.name}`
 
       const { error: uploadError } = await supabase.storage
@@ -62,8 +63,9 @@ export default function ListItemPage() {
       title,
       description,
       category,
-      condition,
+      condition: listingType === 'offer' ? condition : null,
       photo_url: photoUrl,
+      listing_type: listingType,
     })
 
     setLoading(false)
@@ -79,12 +81,33 @@ export default function ListItemPage() {
   return (
     <div className="min-h-screen bg-white px-8 py-10 max-w-lg mx-auto">
       <h1 className="text-3xl font-bold mb-2">List an item</h1>
-      <p className="text-gray-500 mb-8 text-base">Share something with your neighbors</p>
+      <p className="text-gray-500 mb-8 text-base">Share something, or ask for something you need</p>
+
+      <div className="flex gap-2 mb-7 bg-gray-100 rounded-full p-1">
+        <button
+          type="button"
+          onClick={() => setListingType('offer')}
+          className={`flex-1 rounded-full py-2.5 text-sm font-medium cursor-pointer ${
+            listingType === 'offer' ? 'bg-white shadow-sm' : 'text-gray-500'
+          }`}
+        >
+          I have this to lend
+        </button>
+        <button
+          type="button"
+          onClick={() => setListingType('request')}
+          className={`flex-1 rounded-full py-2.5 text-sm font-medium cursor-pointer ${
+            listingType === 'request' ? 'bg-white shadow-sm' : 'text-gray-500'
+          }`}
+        >
+          I'm looking for this
+        </button>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <input
           type="text"
-          placeholder="Item name (e.g. Cordless drill)"
+          placeholder={listingType === 'offer' ? 'Item name (e.g. Cordless drill)' : 'What are you looking for?'}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
@@ -109,25 +132,29 @@ export default function ListItemPage() {
           ))}
         </select>
 
-        <select
-          value={condition}
-          onChange={(e) => setCondition(e.target.value)}
-          className="w-full rounded-full border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          {CONDITIONS.map((c) => (
-            <option key={c} value={c}>{c}</option>
-          ))}
-        </select>
+        {listingType === 'offer' && (
+          <>
+            <select
+              value={condition}
+              onChange={(e) => setCondition(e.target.value)}
+              className="w-full rounded-full border border-gray-200 px-6 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              {CONDITIONS.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
 
-        <div>
-          <label className="block text-base text-gray-500 mb-2">Photo (optional)</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
-            className="text-base"
-          />
-        </div>
+            <div>
+              <label className="block text-base text-gray-500 mb-2">Photo (optional)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
+                className="text-base"
+              />
+            </div>
+          </>
+        )}
 
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
@@ -136,7 +163,7 @@ export default function ListItemPage() {
           disabled={loading}
           className="w-full rounded-full bg-black text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
-          {loading ? 'Listing item...' : 'List item'}
+          {loading ? 'Posting...' : listingType === 'offer' ? 'List item' : 'Post request'}
         </button>
       </form>
     </div>

@@ -17,6 +17,7 @@ type Item = {
   category: string
   condition: string | null
   photo_url: string | null
+  listing_type: 'offer' | 'request'
   residents: { name: string; apartment_no: string } | null
 }
 
@@ -44,7 +45,7 @@ export default function HomePage() {
     async function loadItems() {
       const { data, error } = await supabase
         .from('items')
-        .select('id, title, category, condition, photo_url, residents(name, apartment_no)')
+        .select('id, title, category, condition, photo_url, listing_type, residents(name, apartment_no)')
         .order('created_at', { ascending: false })
 
       if (!error && data) setItems(data as unknown as Item[])
@@ -90,13 +91,28 @@ export default function HomePage() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
           {filteredItems.map((item) => (
-            <a key={item.id} href={`/item/${item.id}`} className="rounded-xl border border-gray-100 overflow-hidden block hover:border-gray-300 transition-colors">
-              <div className="h-32 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">
+            <a
+              key={item.id}
+              href={`/item/${item.id}`}
+              className={`rounded-xl overflow-hidden block transition-colors ${
+                item.listing_type === 'request'
+                  ? 'border-2 border-dashed border-gray-300 hover:border-gray-400'
+                  : 'border border-gray-100 hover:border-gray-300'
+              }`}
+            >
+              <div className="h-32 bg-gray-100 flex items-center justify-center text-gray-300 text-xs relative">
                 {item.photo_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
                 ) : (
-                  <CategoryIcon category={item.category} size={48} />
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <CategoryIcon category={item.category} size={48} />
+                  </div>
+                )}
+                {item.listing_type === 'request' && (
+                  <span className="absolute top-2 left-2 bg-gray-900 text-white text-[11px] px-2.5 py-1 rounded-full">
+                    Looking for
+                  </span>
                 )}
               </div>
               <div className="p-4">
