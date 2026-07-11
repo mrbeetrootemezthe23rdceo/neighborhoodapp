@@ -19,17 +19,14 @@ function clientAs() {
 
 let janeId: string
 let markId: string
-let tomId: string
 let markItemId: string
 let conversationId: string
 
 beforeAll(async () => {
   const { data: jane } = await adminClient.from('residents').select('id').eq('name', 'Jane Cooper').single()
   const { data: mark } = await adminClient.from('residents').select('id').eq('name', 'Mark Alvarez').single()
-  const { data: tom } = await adminClient.from('residents').select('id').eq('name', 'Tom Berg').single()
   janeId = jane!.id
   markId = mark!.id
-  tomId = tom!.id
 
   const { data: markItem } = await adminClient
     .from('items')
