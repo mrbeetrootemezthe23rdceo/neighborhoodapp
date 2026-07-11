@@ -18,7 +18,7 @@ export default function AppHeader({
   }
 
   return (
-    <div className="flex items-center gap-4 mb-10">
+    <div className="flex items-center gap-4 mb-10 pb-5" style={{ borderBottom: '1px solid #FDBA74' }}>
       <a href="/" className="text-2xl font-bold whitespace-nowrap" style={{ color: '#7C2D12' }}>ToolShare</a>
 
       {onSearchChange !== undefined && (
@@ -39,10 +39,13 @@ export default function AppHeader({
       >
         + List item
       </a>
-      <a href="/messages" className="text-base whitespace-nowrap" style={{ color: '#9A3412' }}>
+      <a href="/my-listings" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#9A3412' }}>
+        My listings
+      </a>
+      <a href="/messages" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#9A3412' }}>
         Messages
       </a>
-      <button onClick={handleLogout} className="text-base whitespace-nowrap cursor-pointer" style={{ color: '#9A3412' }}>
+      <button onClick={handleLogout} className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#9A3412' }}>
         Log out
       </button>
     </div>

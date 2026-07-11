@@ -66,7 +66,7 @@ export default function MessagesListPage() {
               <a
                 key={c.id}
                 href={`/messages/${c.id}`}
-                className="block rounded-xl bg-white px-5 py-4"
+                className="block rounded-xl bg-white px-5 py-4 cursor-pointer"
                 style={{ border: '1px solid #FED7AA' }}
               >
                 <p className="text-base font-semibold" style={{ color: '#431407' }}>{c.items?.title ?? 'Item'}</p>

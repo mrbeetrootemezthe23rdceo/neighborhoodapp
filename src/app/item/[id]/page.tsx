@@ -24,6 +24,7 @@ export default function ItemDetailPage() {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [message, setMessage] = useState('')
   const [sending, setSending] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -99,6 +100,23 @@ export default function ItemDetailPage() {
     router.push(`/messages/${conversationId}`)
   }
 
+  async function handleDelete() {
+    if (!item) return
+    const confirmed = window.confirm('Delete this listing? This cannot be undone.')
+    if (!confirmed) return
+
+    setDeleting(true)
+    const { error } = await supabase.from('items').delete().eq('id', item.id)
+    setDeleting(false)
+
+    if (error) {
+      setError(error.message)
+      return
+    }
+
+    router.push('/')
+  }
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>
   }
@@ -136,8 +154,26 @@ export default function ItemDetailPage() {
         <p className="text-base mt-5" style={{ color: '#431407' }}>{item.description}</p>
       )}
 
+      {error && <p className="text-red-600 text-sm mt-4">{error}</p>}
+
       {isOwnItem ? (
-        <p className="text-base mt-7" style={{ color: '#B45309' }}>This is your own listing.</p>
+        <div className="mt-7 flex gap-3">
+          <a
+            href={`/item/${item.id}/edit`}
+            className="flex-1 rounded-full py-3.5 text-base font-medium text-center cursor-pointer"
+            style={{ backgroundColor: 'white', color: '#9A3412', border: '1px solid #FED7AA' }}
+          >
+            Edit
+          </a>
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="flex-1 rounded-full py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            style={{ backgroundColor: 'white', color: '#DC2626', border: '1px solid #FCA5A5' }}
+          >
+            {deleting ? 'Deleting...' : 'Delete'}
+          </button>
+        </div>
       ) : (
         <form onSubmit={handleRequestToBorrow} className="mt-7 space-y-4">
           <textarea
@@ -149,7 +185,6 @@ export default function ItemDetailPage() {
             className="w-full rounded-2xl bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
             style={{ border: '1px solid #FED7AA' }}
           />
-          {error && <p className="text-red-600 text-sm">{error}</p>}
           <button
             type="submit"
             disabled={sending}
