@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabaseClient'
 import AppHeader from '@/components/AppHeader'
 import CategoryIcon from '@/components/CategoryIcon'
 import ItemCard, { Item } from '@/components/ItemCard'
+import { filterItems } from '@/lib/filterItems'
 
 const CATEGORIES = [
   'Power Tools', 'Hand Tools', 'Garden', 'Kitchen',
@@ -46,11 +47,7 @@ export default function HomePage() {
     loadItems()
   }, [checkingAuth])
 
-  const filteredItems = items.filter((item) => {
-    const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase())
-    const matchesCategory = !activeCategory || item.category === activeCategory
-    return matchesSearch && matchesCategory
-  })
+  const filteredItems = filterItems(items, search, activeCategory)
 
   const offerItems = filteredItems.filter((item) => item.listing_type === 'offer')
   const requestItems = filteredItems.filter((item) => item.listing_type === 'request')
