@@ -119,6 +119,7 @@ export default function ThreadPage() {
       <form onSubmit={handleSend} className="flex gap-3">
         <input
           type="text"
+          aria-label="Type a message"
           placeholder="Type a message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}

@@ -24,6 +24,7 @@ export default function AppHeader({
       {onSearchChange !== undefined && (
         <input
           type="text"
+          aria-label="Search listings"
           placeholder="Search for a drill, ladder, tent..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}

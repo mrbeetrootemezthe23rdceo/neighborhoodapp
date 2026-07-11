@@ -126,48 +126,62 @@ export default function EditItemPage() {
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-          style={{ border: '1px solid #FED7AA' }}
-        />
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Title</label>
+          <input
+            id="title"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+            style={{ border: '1px solid #FED7AA' }}
+          />
+        </div>
 
-        <textarea
-          placeholder="Description (optional)"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={3}
-          className="w-full rounded-2xl bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-          style={{ border: '1px solid #FED7AA' }}
-        />
+        <div>
+          <label htmlFor="description" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Description (optional)</label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={3}
+            className="w-full rounded-2xl bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+            style={{ border: '1px solid #FED7AA' }}
+          />
+        </div>
 
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-          style={{ border: '1px solid #FED7AA' }}
-        >
-          {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
+        <div>
+          <label htmlFor="category" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Category</label>
+          <select
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+            style={{ border: '1px solid #FED7AA' }}
+          >
+            {CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
 
         {listingType === 'offer' && (
           <>
-            <select
-              value={condition}
-              onChange={(e) => setCondition(e.target.value)}
-              className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-              style={{ border: '1px solid #FED7AA' }}
-            >
-              {CONDITIONS.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
+            <div>
+              <label htmlFor="condition" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Condition</label>
+              <select
+                id="condition"
+                value={condition}
+                onChange={(e) => setCondition(e.target.value)}
+                className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+                style={{ border: '1px solid #FED7AA' }}
+              >
+                {CONDITIONS.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </div>
 
             {currentPhotoUrl && !photoFile && (
               <div className="rounded-xl overflow-hidden h-32 w-32">
@@ -177,10 +191,11 @@ export default function EditItemPage() {
             )}
 
             <div>
-              <label className="block text-base mb-2" style={{ color: '#9A3412' }}>
+              <label htmlFor="photo" className="block text-base mb-2" style={{ color: '#9A3412' }}>
                 {currentPhotoUrl ? 'Replace photo (optional)' : 'Photo (optional)'}
               </label>
               <input
+                id="photo"
                 type="file"
                 accept="image/*"
                 onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}

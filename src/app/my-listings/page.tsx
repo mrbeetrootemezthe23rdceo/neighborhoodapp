@@ -41,6 +41,10 @@ export default function MyListingsPage() {
     <div className="min-h-screen px-10 py-8 max-w-7xl mx-auto" style={{ background: '#FFE9D6' }}>
       <AppHeader />
 
+      <button onClick={() => router.push('/')} className="text-base mb-5 cursor-pointer" style={{ color: '#9A3412' }}>
+        ← Back
+      </button>
+
       <h1 className="text-2xl font-bold mb-6" style={{ color: '#7C2D12' }}>My listings</h1>
 
       {loading ? (

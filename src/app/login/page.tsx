@@ -46,24 +46,33 @@ export default function LoginPage() {
         <p className="mb-8 text-base" style={{ color: '#9A3412' }}>Log in to browse and lend tools</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-            style={{ border: '1px solid #FED7AA' }}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-            style={{ border: '1px solid #FED7AA' }}
-          />
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Email</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+              style={{ border: '1px solid #FED7AA' }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Password</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+              style={{ border: '1px solid #FED7AA' }}
+            />
+          </div>
 
           {error && <p className="text-red-600 text-sm">{error}</p>}
 
@@ -79,7 +88,7 @@ export default function LoginPage() {
 
         <p className="text-base mt-6" style={{ color: '#9A3412' }}>
           No account yet?{' '}
-          <a href="/signup" className="font-medium" style={{ color: '#C2410C' }}>Sign up</a>
+          <a href="/signup" className="font-medium cursor-pointer" style={{ color: '#C2410C' }}>Sign up</a>
         </p>
       </div>
     </div>
