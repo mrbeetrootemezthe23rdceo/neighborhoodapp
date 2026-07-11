@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
+import Link from 'next/link'
 
 type Item = {
   id: string
@@ -158,13 +159,13 @@ export default function ItemDetailPage() {
 
       {isOwnItem ? (
         <div className="mt-7 flex gap-3">
-          <a
+          <Link
             href={`/item/${item.id}/edit`}
             className="flex-1 rounded-full py-3.5 text-base font-medium text-center cursor-pointer"
             style={{ backgroundColor: 'white', color: '#9A3412', border: '1px solid #FED7AA' }}
           >
             Edit
-          </a>
+          </Link>
           <button
             onClick={handleDelete}
             disabled={deleting}

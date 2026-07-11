@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import AppHeader from '@/components/AppHeader'
 import ItemCard, { Item } from '@/components/ItemCard'
+import Link from 'next/link'
 
 export default function MyListingsPage() {
   const [checkingAuth, setCheckingAuth] = useState(true)
@@ -52,7 +53,7 @@ export default function MyListingsPage() {
       ) : items.length === 0 ? (
         <p className="text-base" style={{ color: '#B45309' }}>
           You haven&apos;t posted anything yet.{' '}
-          <a href="/list-item" className="font-medium cursor-pointer" style={{ color: '#C2410C' }}>List an item</a>
+          <Link href="/list-item" className="font-medium cursor-pointer" style={{ color: '#C2410C' }}>List an item</Link>
         </p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">

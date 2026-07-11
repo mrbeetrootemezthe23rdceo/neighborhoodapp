@@ -1,0 +1,105 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabaseClient'
+
+export default function CompleteProfilePage() {
+  const [name, setName] = useState('')
+  const [apartmentNo, setApartmentNo] = useState('')
+  const [phone, setPhone] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+
+    const { data: userData, error: userError } = await supabase.auth.getUser()
+
+    if (userError || !userData.user) {
+      setLoading(false)
+      setError('You need to be logged in to do this.')
+      return
+    }
+
+    const { error } = await supabase
+      .from('residents')
+      .update({ name, apartment_no: apartmentNo, phone })
+      .eq('id', userData.user.id)
+
+    setLoading(false)
+
+    if (error) {
+      setError(error.message)
+      return
+    }
+
+    router.push('/')
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#FFE9D6' }}>
+      <div className="w-full max-w-md">
+        <h1 className="text-3xl font-bold mb-2" style={{ color: '#7C2D12' }}>One more step</h1>
+        <p className="mb-8 text-base" style={{ color: '#9A3412' }}>Tell your neighbors who you are</p>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Your name</label>
+            <input
+              id="name"
+              type="text"
+              placeholder="Jane Cooper"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+              style={{ border: '1px solid #FED7AA' }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="apartmentNo" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Apartment number</label>
+            <input
+              id="apartmentNo"
+              type="text"
+              placeholder="e.g. 3B"
+              value={apartmentNo}
+              onChange={(e) => setApartmentNo(e.target.value)}
+              required
+              className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+              style={{ border: '1px solid #FED7AA' }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="phone" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Phone (optional)</label>
+            <input
+              id="phone"
+              type="tel"
+              placeholder="555-0100"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
+              style={{ border: '1px solid #FED7AA' }}
+            />
+          </div>
+
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-full text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            style={{ backgroundColor: '#EA580C' }}
+          >
+            {loading ? 'Saving...' : 'Finish setup'}
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}

@@ -1,4 +1,5 @@
 import CategoryIcon from '@/components/CategoryIcon'
+import Link from 'next/link'
 
 export type Item = {
   id: string
@@ -12,7 +13,7 @@ export type Item = {
 
 export default function ItemCard({ item }: { item: Item }) {
   return (
-    <a
+    <Link
       href={`/item/${item.id}`}
       className="rounded-xl overflow-hidden block transition-colors bg-white cursor-pointer"
       style={{
@@ -41,6 +42,6 @@ export default function ItemCard({ item }: { item: Item }) {
           {item.category} · {item.residents?.apartment_no ?? 'Unknown'}
         </p>
       </div>
-    </a>
+    </Link>
   )
 }

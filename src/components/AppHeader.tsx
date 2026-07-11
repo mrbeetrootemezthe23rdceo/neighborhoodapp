@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { supabase } from '@/lib/supabaseClient'
 
 export default function AppHeader({
@@ -19,7 +20,7 @@ export default function AppHeader({
 
   return (
     <div className="flex items-center gap-4 mb-10 pb-5" style={{ borderBottom: '1px solid #FDBA74' }}>
-      <a href="/" className="text-2xl font-bold whitespace-nowrap" style={{ color: '#7C2D12' }}>ToolShare</a>
+      <Link href="/" className="text-2xl font-bold whitespace-nowrap" style={{ color: '#7C2D12' }}>ToolShare</Link>
 
       {onSearchChange !== undefined && (
         <input
@@ -33,19 +34,19 @@ export default function AppHeader({
         />
       )}
 
-      <a
+      <Link
         href="/list-item"
         className="text-base text-white rounded-full px-6 py-3.5 whitespace-nowrap cursor-pointer"
         style={{ backgroundColor: '#EA580C' }}
       >
         + List item
-      </a>
-      <a href="/my-listings" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#9A3412' }}>
+      </Link>
+      <Link href="/my-listings" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#9A3412' }}>
         My listings
-      </a>
-      <a href="/messages" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#9A3412' }}>
+      </Link>
+      <Link href="/messages" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#9A3412' }}>
         Messages
-      </a>
+      </Link>
       <button onClick={handleLogout} className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#9A3412' }}>
         Log out
       </button>

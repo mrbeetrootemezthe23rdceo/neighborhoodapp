@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
+import Link from 'next/link'
 
 type Conversation = {
   id: string
@@ -63,7 +64,7 @@ export default function MessagesListPage() {
           {conversations.map((c) => {
             const otherPerson = c.requester_id === currentUserId ? c.owner : c.requester
             return (
-              <a
+              <Link
                 key={c.id}
                 href={`/messages/${c.id}`}
                 className="block rounded-xl bg-white px-5 py-4 cursor-pointer"
@@ -73,7 +74,7 @@ export default function MessagesListPage() {
                 <p className="text-sm mt-1" style={{ color: '#9A3412' }}>
                   with {otherPerson?.name ?? 'Neighbor'}
                 </p>
-              </a>
+              </Link>
             )
           })}
         </div>
