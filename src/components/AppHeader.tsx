@@ -20,7 +20,7 @@ export default function AppHeader({
 
   return (
     <div className="flex items-center gap-4 mb-10 pb-5" style={{ borderBottom: '1px solid #FDBA74' }}>
-      <Link href="/" className="text-2xl font-bold whitespace-nowrap" style={{ color: '#7C2D12' }}>ToolShare</Link>
+      <Link href="/" className="text-2xl font-bold whitespace-nowrap" style={{ color: '#111111' }}>ToolShare</Link>
 
       {onSearchChange !== undefined && (
         <input
@@ -41,13 +41,13 @@ export default function AppHeader({
       >
         + List item
       </Link>
-      <Link href="/my-listings" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#9A3412' }}>
+      <Link href="/my-listings" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#111111' }}>
         My listings
       </Link>
-      <Link href="/messages" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#9A3412' }}>
+      <Link href="/messages" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#111111' }}>
         Messages
       </Link>
-      <button onClick={handleLogout} className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#9A3412' }}>
+      <button onClick={handleLogout} className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#111111' }}>
         Log out
       </button>
     </div>

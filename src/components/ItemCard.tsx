@@ -37,7 +37,7 @@ export default function ItemCard({ item }: { item: Item }) {
         )}
       </div>
       <div className="p-4">
-        <p className="text-base font-semibold" style={{ color: '#431407' }}>{item.title}</p>
+        <p className="text-base font-semibold" style={{ color: '#111111' }}>{item.title}</p>
         <p className="text-sm mt-1" style={{ color: '#9A3412' }}>
           {item.category} · {item.residents?.apartment_no ?? 'Unknown'}
         </p>

@@ -55,7 +55,7 @@ export default function MessagesListPage() {
         ← Back
       </button>
 
-      <h1 className="text-2xl font-bold mb-7" style={{ color: '#7C2D12' }}>Messages</h1>
+      <h1 className="text-2xl font-bold mb-7" style={{ color: '#111111' }}>Messages</h1>
 
       {conversations.length === 0 ? (
         <p className="text-base" style={{ color: '#B45309' }}>No conversations yet.</p>

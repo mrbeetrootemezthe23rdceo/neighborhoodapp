@@ -46,7 +46,7 @@ export default function MyListingsPage() {
         ← Back
       </button>
 
-      <h1 className="text-2xl font-bold mb-6" style={{ color: '#7C2D12' }}>My listings</h1>
+      <h1 className="text-2xl font-bold mb-6" style={{ color: '#111111' }}>My listings</h1>
 
       {loading ? (
         <p className="text-base" style={{ color: '#B45309' }}>Loading...</p>

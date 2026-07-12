@@ -83,7 +83,7 @@ export default function HomePage() {
         <>
           {requestItems.length > 0 && (
             <div className="mb-10">
-              <h2 className="text-xl font-bold mb-4" style={{ color: '#7C2D12' }}>Looking for</h2>
+              <h2 className="text-xl font-bold mb-4" style={{ color: '#111111' }}>Looking for</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
                 {requestItems.map((item) => (
                   <ItemCard key={item.id} item={item} />
@@ -94,7 +94,7 @@ export default function HomePage() {
 
           {offerItems.length > 0 && (
             <div className="mb-10">
-              <h2 className="text-xl font-bold mb-4" style={{ color: '#7C2D12' }}>Available to borrow</h2>
+              <h2 className="text-xl font-bold mb-4" style={{ color: '#111111' }}>Available to borrow</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
                 {offerItems.map((item) => (
                   <ItemCard key={item.id} item={item} />
