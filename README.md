@@ -61,7 +61,7 @@ cp .env.local.example .env.local   # fill in your own Supabase project's URL and
 npm run dev
 ```
 
-Run `schema.sql` and `storage_policies.sql` in your Supabase project's SQL Editor to set up the database. Optionally run `node seed.mjs` (requires a `SUPABASE_SECRET_KEY` in `.env.local`) to populate fake residents and listings for demo purposes.
+Run `schema.sql` in your Supabase project's SQL Editor to set up the database tables. Then, in the Supabase dashboard, go to **Storage** and create a new bucket named `item-photos` (set it to public) — this can't be scripted via SQL and has to be done manually. Once that bucket exists, run `storage_policies.sql` to set its access rules. Optionally run `node seed.mjs` (requires a `SUPABASE_SECRET_KEY` in `.env.local`) to populate fake residents and listings for demo purposes.
 
 ## Known limitations (deliberate v1 scope)
 
