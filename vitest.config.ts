@@ -2,9 +2,9 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    // Only auto-run fast, no-network unit tests (like src/lib/filterItems.test.ts).
-    // RLS tests live in /tests and need real Supabase credentials, so they're
-    // run separately and deliberately excluded from CI's placeholder-credential build.
-    include: ['src/**/*.test.ts'],
+    // Both unit tests (src/) and the RLS integration test (tests/) are
+    // recognized here — which script actually runs which is controlled
+    // by the filter passed on the command line in package.json.
+    include: ['src/**/*.test.ts', 'tests/**/*.test.ts'],
   },
 })
