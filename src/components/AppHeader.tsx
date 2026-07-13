@@ -20,7 +20,10 @@ export default function AppHeader({
 
   return (
     <div className="flex items-center gap-4 mb-10 pb-5" style={{ borderBottom: '1px solid #FDBA74' }}>
-      <Link href="/" className="text-2xl font-bold whitespace-nowrap" style={{ color: '#111111' }}>ToolShare</Link>
+      <Link href="/" className="whitespace-nowrap flex items-center gap-1" style={{ color: '#111111' }}>
+        <span style={{ fontFamily: 'var(--font-fredoka)', fontWeight: 700, fontSize: '35px' }}>ToolShare</span>
+        <span style={{ display: 'inline-block', transform: 'rotate(25deg)', fontSize: '23px' }}>🔧</span>
+      </Link>
 
       {onSearchChange !== undefined && (
         <input
