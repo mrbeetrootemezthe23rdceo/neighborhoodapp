@@ -3,6 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
+import AppHeader from '@/components/AppHeader'
+import ConversationSidebar from '@/components/ConversationSidebar'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { PaperPlaneTiltIcon } from '@phosphor-icons/react/dist/ssr'
 
 type Message = {
   id: string
@@ -15,7 +20,11 @@ type Message = {
 type ConversationInfo = {
   id: string
   item_id: string
+  requester_id: string
+  owner_id: string
   items: { title: string } | null
+  requester: { name: string } | null
+  owner: { name: string } | null
 }
 
 export default function ThreadPage() {
@@ -40,7 +49,14 @@ export default function ThreadPage() {
 
       const { data: convoData } = await supabase
         .from('conversations')
-        .select('id, item_id, items(title)')
+        .select(
+          `
+          id, item_id, requester_id, owner_id,
+          items(title),
+          requester:residents!conversations_requester_id_fkey(name),
+          owner:residents!conversations_owner_id_fkey(name)
+        `
+        )
         .eq('id', id)
         .single()
 
@@ -82,59 +98,66 @@ export default function ThreadPage() {
     }
   }
 
-  if (loading) {
-    return <div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>
-  }
+  const otherPerson =
+    conversation && currentUserId
+      ? conversation.requester_id === currentUserId
+        ? conversation.owner
+        : conversation.requester
+      : null
 
   return (
-    <div className="min-h-screen px-8 py-10 max-w-lg mx-auto flex flex-col" style={{ background: '#FFE9D6' }}>
-      <button onClick={() => router.push('/messages')} className="text-base mb-5 cursor-pointer" style={{ color: '#9A3412' }}>
-        ← All messages
-      </button>
+    <div className="flex h-screen flex-col">
+      <AppHeader />
 
-      <h1 className="text-xl font-bold mb-5" style={{ color: '#7C2D12' }}>
-        {conversation?.items?.title ?? 'Conversation'}
-      </h1>
+      <div className="mx-auto flex h-[calc(100vh-70px)] w-full max-w-7xl">
+        <ConversationSidebar activeId={id} />
 
-      <div className="flex-1 space-y-4 mb-5">
-        {messages.map((msg) => {
-          const isMine = msg.sender_id === currentUserId
-          return (
-            <div
-              key={msg.id}
-              className="max-w-[75%] rounded-2xl px-5 py-3 text-base"
-              style={isMine
-                ? { backgroundColor: '#EA580C', color: 'white', marginLeft: 'auto' }
-                : { backgroundColor: 'white', color: '#431407' }}
-            >
-              {!isMine && (
-                <p className="text-sm mb-1" style={{ color: '#9A3412' }}>{msg.residents?.name ?? 'Neighbor'}</p>
-              )}
-              <p>{msg.body}</p>
-            </div>
-          )
-        })}
+        <div className="flex min-w-0 flex-1 flex-col">
+          {loading ? (
+            <div className="flex flex-1 items-center justify-center text-body-mid">Loading...</div>
+          ) : !conversation ? (
+            <div className="flex flex-1 items-center justify-center text-body-mid">Conversation not found.</div>
+          ) : (
+            <>
+              <div className="border-b border-border-soft px-6 pt-8 pb-4">
+                <p className="text-lg font-semibold text-ink">{otherPerson?.name ?? 'Neighbor'}</p>
+                <p className="mt-0.5 text-sm text-body-mid">About {conversation.items?.title ?? 'this item'}</p>
+              </div>
+
+              <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-6">
+                {messages.map((msg) => {
+                  const isMine = msg.sender_id === currentUserId
+                  return (
+                    <div
+                      key={msg.id}
+                      className={`max-w-[60%] rounded-md px-4 py-2.5 text-base ${
+                        isMine ? 'self-end bg-ink text-canvas-soft' : 'self-start border border-border-soft bg-canvas text-ink'
+                      }`}
+                    >
+                      {msg.body}
+                    </div>
+                  )
+                })}
+              </div>
+
+              <form onSubmit={handleSend} className="flex gap-3 border-t border-border-soft px-6 py-4">
+                <Input
+                  type="text"
+                  aria-label="Type a message"
+                  placeholder="Write a message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  className="h-11 flex-1 rounded-sm border-ink px-4 text-base"
+                />
+                <Button type="submit" disabled={sending} className="h-11 cursor-pointer gap-1.5 px-5 text-base">
+                  <PaperPlaneTiltIcon size={16} weight="bold" />
+                  Send
+                </Button>
+              </form>
+            </>
+          )}
+        </div>
       </div>
-
-      <form onSubmit={handleSend} className="flex gap-3">
-        <input
-          type="text"
-          aria-label="Type a message"
-          placeholder="Type a message..."
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          className="flex-1 rounded-full bg-white px-6 py-3 text-base focus:outline-none focus:ring-2"
-          style={{ border: '1px solid #FED7AA' }}
-        />
-        <button
-          type="submit"
-          disabled={sending}
-          className="rounded-full text-white px-6 py-3 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-          style={{ backgroundColor: '#EA580C' }}
-        >
-          Send
-        </button>
-      </form>
     </div>
   )
 }

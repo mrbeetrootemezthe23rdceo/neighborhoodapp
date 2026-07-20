@@ -1,22 +1,24 @@
-const ICON_MAP: Record<string, string> = {
-  'Power Tools': '🔧',
-  'Hand Tools': '🔨',
-  'Garden': '🌱',
-  'Kitchen': '🍳',
-  'Sports & Outdoor': '⚽',
-  'Camping': '⛺',
-  'Household': '🧹',
-  'Electronics': '🔌',
-}
+import { createElement } from "react"
+import { categoryIcon } from "@/lib/categories"
 
-export default function CategoryIcon({ category, size = 68 }: { category: string; size?: number }) {
-  const emoji = ICON_MAP[category] ?? '📦'
+export default function CategoryIcon({
+  category,
+  size = 64,
+  className = "",
+}: {
+  category: string
+  size?: number
+  className?: string
+}) {
   return (
     <div
-      style={{ width: size, height: size, background: '#FFF3E8', fontSize: size * 0.45 }}
-      className="rounded-2xl flex items-center justify-center shrink-0"
+      className={`flex shrink-0 items-center justify-center rounded-md bg-canvas ${className}`}
+      style={{ width: size, height: size }}
     >
-      {emoji}
+      {createElement(categoryIcon(category), {
+        size: Math.round(size * 0.42),
+        className: "text-ink/70",
+      })}
     </div>
   )
 }

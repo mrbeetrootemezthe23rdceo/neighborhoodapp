@@ -1,45 +1,98 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand tokens, from the ToolShare design system */
+  --canvas: #fffefb;
+  --canvas-soft: #f8f4f0;
+  --ink: #201515;
+  --ink-soft: #2f2a26;
+  --body: #605d52;
+  --body-mid: #939084;
+  --mute: #c5c0b1;
+  --border-soft: #e4ddd2;
+  --danger: #c0392b;
+  --brand-primary: #ff4f00;
+  --brand-primary-hover: #e64700;
+  --brand-primary-active: #cc3f00;
+  --on-primary: #fffefb;
+
+  --shadow-modal: 0 20px 48px rgba(32, 21, 21, 0.18);
+  --shadow-toast: 0 8px 24px rgba(32, 21, 21, 0.14);
+
+  /* shadcn-style semantic aliases so the generated ui/ components pick up the brand */
+  --background: var(--canvas);
+  --foreground: var(--ink);
+  --card: var(--canvas-soft);
+  --card-foreground: var(--ink);
+  --popover: var(--canvas);
+  --popover-foreground: var(--ink);
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--on-primary);
+  --secondary: var(--canvas-soft);
+  --secondary-foreground: var(--ink);
+  --muted: var(--canvas-soft);
+  --muted-foreground: var(--body-mid);
+  --accent: var(--canvas-soft);
+  --accent-foreground: var(--ink);
+  --destructive: var(--danger);
+  --border: var(--ink);
+  --input: var(--ink);
+  --ring: var(--brand-primary);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-poppins);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-body: var(--body);
+  --color-body-mid: var(--body-mid);
+  --color-mute: var(--mute);
+  --color-canvas: var(--canvas);
+  --color-canvas-soft: var(--canvas-soft);
+  --color-border-soft: var(--border-soft);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --font-sans: var(--font-inter);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--canvas);
+  color: var(--ink);
 }
 
 /* Hover feedback for every clickable button/link across the app */
 button.cursor-pointer,
 a.cursor-pointer {
-  transition: filter 0.15s ease, transform 0.05s ease;
+  transition: filter 0.15s ease, background-color 0.15s ease;
 }
 button.cursor-pointer:hover,
 a.cursor-pointer:hover {
-  filter: brightness(0.93);
-}
-button.cursor-pointer:active,
-a.cursor-pointer:active {
-  transform: scale(0.98);
+  filter: brightness(0.95);
 }
 
-/* Underline feedback for plain-text nav links (Messages, Log out, etc.) */
 .nav-link:hover {
-  text-decoration: underline;
+  color: var(--brand-primary);
 }

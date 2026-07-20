@@ -1,8 +1,17 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { MagnifyingGlassIcon, PlusIcon } from '@phosphor-icons/react/dist/ssr'
 import { supabase } from '@/lib/supabaseClient'
+import { Input } from '@/components/ui/input'
+
+const NAV_LINKS = [
+  { href: '/', label: 'Browse' },
+  { href: '/my-listings', label: 'My listings' },
+  { href: '/messages', label: 'Messages' },
+]
 
 export default function AppHeader({
   search,
@@ -11,48 +20,82 @@ export default function AppHeader({
   search?: string
   onSearchChange?: (val: string) => void
 }) {
-  const router = useRouter()
+  const pathname = usePathname()
+  const [initial, setInitial] = useState('?')
 
-  async function handleLogout() {
-    await supabase.auth.signOut()
-    router.push('/login')
-  }
+  useEffect(() => {
+    async function loadResident() {
+      const { data: userData } = await supabase.auth.getUser()
+      if (!userData.user) return
+      const { data: resident } = await supabase
+        .from('residents')
+        .select('name')
+        .eq('id', userData.user.id)
+        .single()
+      const name = resident?.name?.trim()
+      setInitial(name ? name[0].toUpperCase() : userData.user.email?.[0]?.toUpperCase() ?? '?')
+    }
+    loadResident()
+  }, [])
 
   return (
-    <div className="flex items-center gap-4 mb-10 pb-5" style={{ borderBottom: '1px solid #FDBA74' }}>
-      <Link href="/" className="whitespace-nowrap flex items-center gap-1" style={{ color: '#111111' }}>
-        <span style={{ fontFamily: 'var(--font-fredoka)', fontWeight: 700, fontSize: '35px' }}>ToolShare</span>
-        <span style={{ display: 'inline-block', transform: 'rotate(25deg)', fontSize: '23px' }}>🔧</span>
-      </Link>
+    <div className="sticky top-0 z-20 w-full border-b border-border-soft bg-canvas px-8 py-3.5">
+      <div className="mx-auto flex max-w-7xl items-center gap-7">
+        <Link href="/" className="shrink-0 text-xl font-semibold tracking-tight text-ink">
+          ToolShare
+        </Link>
 
-      {onSearchChange !== undefined && (
-        <input
-          type="text"
-          aria-label="Search listings"
-          placeholder="Search for a drill, ladder, tent..."
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="flex-1 rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-          style={{ color: '#B45309' }}
-        />
-      )}
+        <div className="flex shrink-0 gap-1 rounded-xl bg-canvas-soft p-1">
+          {NAV_LINKS.map((link) => {
+            const active = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href)
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`cursor-pointer rounded-lg px-4 py-2 text-sm whitespace-nowrap ${
+                  active ? 'bg-ink font-semibold text-canvas-soft' : 'text-ink hover:text-primary'
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
+        </div>
 
-      <Link
-        href="/list-item"
-        className="text-base text-white rounded-full px-6 py-3.5 whitespace-nowrap cursor-pointer"
-        style={{ backgroundColor: '#EA580C' }}
-      >
-        + List item
-      </Link>
-      <Link href="/my-listings" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#111111' }}>
-        My listings
-      </Link>
-      <Link href="/messages" className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#111111' }}>
-        Messages
-      </Link>
-      <button onClick={handleLogout} className="text-base whitespace-nowrap cursor-pointer nav-link" style={{ color: '#111111' }}>
-        Log out
-      </button>
+        {onSearchChange !== undefined && (
+          <div className="relative flex-1">
+            <MagnifyingGlassIcon
+              size={16}
+              className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-ink/50"
+            />
+            <Input
+              type="text"
+              aria-label="Search listings"
+              placeholder="Search for a drill, ladder, tent..."
+              value={search}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="h-10 rounded-md border-ink pl-9"
+            />
+          </div>
+        )}
+
+        <div className="flex shrink-0 items-center gap-4">
+          <Link
+            href="/list-item"
+            className="inline-flex cursor-pointer items-center gap-1.5 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-primary-foreground"
+          >
+            <PlusIcon size={16} weight="bold" />
+            List item
+          </Link>
+          <Link
+            href="/profile"
+            title="Profile"
+            className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-ink text-sm font-semibold text-canvas-soft"
+          >
+            {initial}
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }

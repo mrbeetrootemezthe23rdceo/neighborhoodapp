@@ -2,7 +2,11 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { supabase } from '@/lib/supabaseClient'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 export default function CompleteProfilePage() {
   const [name, setName] = useState('')
@@ -41,63 +45,65 @@ export default function CompleteProfilePage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#FFE9D6' }}>
-      <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: '#7C2D12' }}>One more step</h1>
-        <p className="mb-8 text-base" style={{ color: '#9A3412' }}>Tell your neighbors who you are</p>
+    <div className="flex min-h-screen flex-col">
+      <div className="px-8 py-6">
+        <Link href="/" className="text-xl font-semibold tracking-tight text-ink">
+          ToolShare
+        </Link>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Your name</label>
-            <input
+      <div className="mx-auto my-auto w-full max-w-md rounded-md bg-canvas-soft p-8">
+        <h1 className="text-3xl font-medium text-ink">One more step</h1>
+        <p className="mt-1.5 text-base text-body">Tell your neighbors who you are</p>
+
+        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="name">Your name</Label>
+            <Input
               id="name"
               type="text"
               placeholder="Jane Cooper"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-              style={{ border: '1px solid #FED7AA' }}
+              className="h-11 rounded-sm border-ink px-4 text-base"
             />
           </div>
 
-          <div>
-            <label htmlFor="apartmentNo" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Apartment number</label>
-            <input
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="apartmentNo">Apartment number</Label>
+            <Input
               id="apartmentNo"
               type="text"
               placeholder="e.g. 3B"
               value={apartmentNo}
               onChange={(e) => setApartmentNo(e.target.value)}
               required
-              className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-              style={{ border: '1px solid #FED7AA' }}
+              className="h-11 rounded-sm border-ink px-4 text-base"
             />
           </div>
 
-          <div>
-            <label htmlFor="phone" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Phone (optional)</label>
-            <input
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="phone">Phone (optional)</Label>
+            <Input
               id="phone"
               type="tel"
               placeholder="555-0100"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-              style={{ border: '1px solid #FED7AA' }}
+              className="h-11 rounded-sm border-ink px-4 text-base"
             />
           </div>
 
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && <p className="text-sm text-destructive">{error}</p>}
 
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="w-full rounded-full text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-            style={{ backgroundColor: '#EA580C' }}
+            className="mt-2 h-12 w-full cursor-pointer justify-center text-base"
           >
             {loading ? 'Saving...' : 'Finish setup'}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

@@ -1,5 +1,6 @@
-import CategoryIcon from '@/components/CategoryIcon'
 import Link from 'next/link'
+import CategoryIcon from '@/components/CategoryIcon'
+import { Badge } from '@/components/ui/badge'
 
 export type Item = {
   id: string
@@ -15,31 +16,30 @@ export default function ItemCard({ item }: { item: Item }) {
   return (
     <Link
       href={`/item/${item.id}`}
-      className="rounded-xl overflow-hidden block transition-colors bg-white cursor-pointer"
-      style={{
-        border: item.listing_type === 'request' ? '2px dashed #FDBA74' : '1px solid #FED7AA',
-      }}
+      className={`block cursor-pointer overflow-hidden rounded-md border bg-canvas-soft p-4 ${
+        item.listing_type === 'request' ? 'border-dashed border-mute' : 'border-border-soft'
+      }`}
     >
-      <div className="h-32 flex items-center justify-center text-xs relative" style={{ background: '#FFF3E8' }}>
+      <div className="relative flex h-35 items-center justify-center overflow-hidden rounded-sm bg-canvas">
         {item.photo_url ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
+          <img src={item.photo_url} alt={item.title} className="h-full w-full object-cover" />
         ) : (
-          <CategoryIcon category={item.category} size={48} />
+          <CategoryIcon category={item.category} size={48} className="bg-transparent" />
         )}
         {item.listing_type === 'request' && (
-          <span
-            className="absolute top-2 left-2 text-white text-[11px] px-2.5 py-1 rounded-full"
-            style={{ backgroundColor: '#9A3412' }}
-          >
+          <Badge className="absolute top-2 left-2" variant="secondary">
             Looking for
-          </span>
+          </Badge>
         )}
       </div>
-      <div className="p-4">
-        <p className="text-base font-semibold" style={{ color: '#111111' }}>{item.title}</p>
-        <p className="text-sm mt-1" style={{ color: '#9A3412' }}>
-          {item.category} · {item.residents?.apartment_no ?? 'Unknown'}
+      <div className="mt-2.5 flex items-start justify-between gap-2">
+        <div>
+          <p className="text-base font-semibold text-ink">{item.title}</p>
+          <p className="mt-0.5 text-sm text-body-mid">{item.category}</p>
+        </div>
+        <p className="shrink-0 text-xs whitespace-nowrap text-body-mid">
+          {item.residents?.apartment_no ? `Apt ${item.residents.apartment_no}` : 'Unknown'}
         </p>
       </div>
     </Link>

@@ -7,11 +7,7 @@ import AppHeader from '@/components/AppHeader'
 import CategoryIcon from '@/components/CategoryIcon'
 import ItemCard, { Item } from '@/components/ItemCard'
 import { filterItems } from '@/lib/filterItems'
-
-const CATEGORIES = [
-  'Power Tools', 'Hand Tools', 'Garden', 'Kitchen',
-  'Sports & Outdoor', 'Camping', 'Household', 'Electronics',
-]
+import { CATEGORIES } from '@/lib/categories'
 
 export default function HomePage() {
   const [checkingAuth, setCheckingAuth] = useState(true)
@@ -48,62 +44,73 @@ export default function HomePage() {
   }, [checkingAuth])
 
   const filteredItems = filterItems(items, search, activeCategory)
-
   const offerItems = filteredItems.filter((item) => item.listing_type === 'offer')
   const requestItems = filteredItems.filter((item) => item.listing_type === 'request')
 
   if (checkingAuth) {
-    return <div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>
+    return <div className="flex min-h-screen items-center justify-center text-body-mid">Loading...</div>
   }
 
   return (
-    <div className="min-h-screen px-10 py-8 max-w-7xl mx-auto" style={{ background: '#FFE9D6' }}>
+    <div className="min-h-screen">
       <AppHeader search={search} onSearchChange={setSearch} />
 
-      <div className="grid grid-cols-4 sm:grid-cols-8 gap-5 mb-10">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-            className="flex flex-col items-center gap-2 cursor-pointer"
-          >
-            <div className={activeCategory === cat ? 'ring-2 rounded-2xl' : ''} style={activeCategory === cat ? { boxShadow: '0 0 0 2px #EA580C' } : {}}>
-              <CategoryIcon category={cat} />
-            </div>
-            <span className="text-xs text-center leading-tight" style={{ color: '#9A3412' }}>{cat}</span>
-          </button>
-        ))}
+      <div className="mx-auto max-w-7xl px-8 py-10">
+        <div className="text-sm font-semibold tracking-[1px] text-primary uppercase">
+          Neighborhood marketplace
+        </div>
+        <h1 className="mt-3 max-w-xl text-4xl leading-[1.1] font-medium text-ink sm:text-5xl">
+          Borrow anything from your neighbors
+        </h1>
+
+        <div className="mt-8 grid grid-cols-4 gap-5 sm:grid-cols-8">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
+              className="flex cursor-pointer flex-col items-center gap-2"
+            >
+              <CategoryIcon
+                category={cat}
+                className={activeCategory === cat ? 'outline outline-2 outline-primary' : ''}
+              />
+              <span className="text-center text-xs leading-tight text-body">{cat}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-10">
+          {loadingItems ? (
+            <p className="text-base text-body-mid">Loading items...</p>
+          ) : filteredItems.length === 0 ? (
+            <p className="text-base text-body-mid">No items found. Try a different search or category.</p>
+          ) : (
+            <>
+              {requestItems.length > 0 && (
+                <div className="mb-10">
+                  <h2 className="mb-4 text-xl font-semibold text-ink">Looking for</h2>
+                  <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
+                    {requestItems.map((item) => (
+                      <ItemCard key={item.id} item={item} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {offerItems.length > 0 && (
+                <div className="mb-10">
+                  <h2 className="mb-4 text-xl font-semibold text-ink">Available to borrow</h2>
+                  <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
+                    {offerItems.map((item) => (
+                      <ItemCard key={item.id} item={item} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
-
-      {loadingItems ? (
-        <p className="text-base" style={{ color: '#B45309' }}>Loading items...</p>
-      ) : filteredItems.length === 0 ? (
-        <p className="text-base" style={{ color: '#B45309' }}>No items found. Try a different search or category.</p>
-      ) : (
-        <>
-          {requestItems.length > 0 && (
-            <div className="mb-10">
-              <h2 className="text-xl font-bold mb-4" style={{ color: '#111111' }}>Looking for</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
-                {requestItems.map((item) => (
-                  <ItemCard key={item.id} item={item} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {offerItems.length > 0 && (
-            <div className="mb-10">
-              <h2 className="text-xl font-bold mb-4" style={{ color: '#111111' }}>Available to borrow</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
-                {offerItems.map((item) => (
-                  <ItemCard key={item.id} item={item} />
-                ))}
-              </div>
-            </div>
-          )}
-        </>
-      )}
     </div>
   )
 }

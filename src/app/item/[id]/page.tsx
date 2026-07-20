@@ -2,8 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabaseClient'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabaseClient'
+import AppHeader from '@/components/AppHeader'
+import CategoryIcon from '@/components/CategoryIcon'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import { ArrowLeftIcon } from '@phosphor-icons/react/dist/ssr'
 
 type Item = {
   id: string
@@ -119,83 +124,91 @@ export default function ItemDetailPage() {
   }
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>
+    return <div className="flex min-h-screen items-center justify-center text-body-mid">Loading...</div>
   }
 
   if (!item) {
-    return <div className="min-h-screen flex items-center justify-center text-gray-400">Item not found.</div>
+    return <div className="flex min-h-screen items-center justify-center text-body-mid">Item not found.</div>
   }
 
   const isOwnItem = item.owner_id === currentUserId
 
   return (
-    <div className="min-h-screen px-8 py-10 max-w-lg mx-auto" style={{ background: '#FFE9D6' }}>
-      <button onClick={() => router.push('/')} className="text-base mb-5 cursor-pointer" style={{ color: '#9A3412' }}>
-        ← Back
-      </button>
+    <div className="min-h-screen">
+      <AppHeader />
 
-      <div className="rounded-2xl overflow-hidden h-72 flex items-center justify-center text-base mb-5" style={{ background: '#FFF3E8', color: '#C2410C' }}>
-        {item.photo_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
+      <div className="mx-auto max-w-lg px-8 py-10">
+        <button
+          onClick={() => router.push('/')}
+          className="mb-5 inline-flex cursor-pointer items-center gap-1.5 text-sm text-body"
+        >
+          <ArrowLeftIcon size={16} />
+          Back
+        </button>
+
+        <div className="mb-5 flex h-72 items-center justify-center overflow-hidden rounded-md bg-canvas-soft">
+          {item.photo_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={item.photo_url} alt={item.title} className="h-full w-full object-cover" />
+          ) : (
+            <CategoryIcon category={item.category} size={88} className="bg-transparent" />
+          )}
+        </div>
+
+        <h1 className="text-2xl font-semibold text-ink">{item.title}</h1>
+        <p className="mt-1.5 text-base text-body">
+          {item.category}
+          {item.condition ? ` · ${item.condition}` : ''}
+        </p>
+        <p className="mt-1.5 text-base text-body">
+          {item.listing_type === 'request' ? 'Requested by' : 'Owned by'} {item.residents?.name ?? 'Unknown'}, apt{' '}
+          {item.residents?.apartment_no ?? '?'}
+        </p>
+
+        {item.description && <p className="mt-5 text-base text-ink-soft">{item.description}</p>}
+
+        {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
+
+        {isOwnItem ? (
+          <div className="mt-7 flex gap-3">
+            <Button
+              variant="outline"
+              nativeButton={false}
+              render={<Link href={`/item/${item.id}/edit`} />}
+              className="h-12 flex-1 cursor-pointer justify-center text-base"
+            >
+              Edit
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={deleting}
+              className="h-12 flex-1 cursor-pointer justify-center text-base"
+            >
+              {deleting ? 'Deleting...' : 'Delete'}
+            </Button>
+          </div>
         ) : (
-          'No photo'
+          <form onSubmit={handleRequestToBorrow} className="mt-7 flex flex-col gap-4">
+            <Textarea
+              aria-label="Message"
+              placeholder={
+                item.listing_type === 'request'
+                  ? 'Let them know you have one to lend'
+                  : "Say hi and let them know when you'd like to borrow it"
+              }
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              required
+              rows={3}
+              className="rounded-sm border-ink px-4 py-3 text-base"
+            />
+            <Button type="submit" disabled={sending} className="h-12 w-full cursor-pointer justify-center text-base">
+              {sending ? 'Sending...' : item.listing_type === 'request' ? 'I have one to offer' : 'Request to borrow'}
+            </Button>
+          </form>
         )}
       </div>
-
-      <h1 className="text-2xl font-bold" style={{ color: '#7C2D12' }}>{item.title}</h1>
-      <p className="text-base mt-1.5" style={{ color: '#9A3412' }}>
-        {item.category}{item.condition ? ` · ${item.condition}` : ''}
-      </p>
-      <p className="text-base mt-1.5" style={{ color: '#9A3412' }}>
-        {item.listing_type === 'request' ? 'Requested by' : 'Owned by'} {item.residents?.name ?? 'Unknown'}, apt {item.residents?.apartment_no ?? '?'}
-      </p>
-
-      {item.description && (
-        <p className="text-base mt-5" style={{ color: '#431407' }}>{item.description}</p>
-      )}
-
-      {error && <p className="text-red-600 text-sm mt-4">{error}</p>}
-
-      {isOwnItem ? (
-        <div className="mt-7 flex gap-3">
-          <Link
-            href={`/item/${item.id}/edit`}
-            className="flex-1 rounded-full py-3.5 text-base font-medium text-center cursor-pointer"
-            style={{ backgroundColor: 'white', color: '#9A3412', border: '1px solid #FED7AA' }}
-          >
-            Edit
-          </Link>
-          <button
-            onClick={handleDelete}
-            disabled={deleting}
-            className="flex-1 rounded-full py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-            style={{ backgroundColor: 'white', color: '#DC2626', border: '1px solid #FCA5A5' }}
-          >
-            {deleting ? 'Deleting...' : 'Delete'}
-          </button>
-        </div>
-      ) : (
-        <form onSubmit={handleRequestToBorrow} className="mt-7 space-y-4">
-          <textarea
-            placeholder={item.listing_type === 'request' ? "Let them know you have one to lend" : "Say hi and let them know when you'd like to borrow it"}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            required
-            rows={3}
-            className="w-full rounded-2xl bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-            style={{ border: '1px solid #FED7AA' }}
-          />
-          <button
-            type="submit"
-            disabled={sending}
-            className="w-full rounded-full text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-            style={{ backgroundColor: '#EA580C' }}
-          >
-            {sending ? 'Sending...' : item.listing_type === 'request' ? 'I have one to offer' : 'Request to borrow'}
-          </button>
-        </form>
-      )}
     </div>
   )
 }

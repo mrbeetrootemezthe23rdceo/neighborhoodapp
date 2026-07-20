@@ -3,13 +3,15 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
+import AppHeader from '@/components/AppHeader'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { CATEGORIES, CONDITIONS } from '@/lib/categories'
 
-const CATEGORIES = [
-  'Power Tools', 'Hand Tools', 'Garden', 'Kitchen',
-  'Sports & Outdoor', 'Camping', 'Household', 'Electronics',
-]
-
-const CONDITIONS = ['Like new', 'Good', 'Fair']
+const selectClass =
+  'h-11 w-full rounded-sm border border-ink bg-canvas px-4 text-base text-ink'
 
 export default function EditItemPage() {
   const { id } = useParams<{ id: string }>()
@@ -18,8 +20,8 @@ export default function EditItemPage() {
   const [listingType, setListingType] = useState<'offer' | 'request'>('offer')
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [category, setCategory] = useState(CATEGORIES[0])
-  const [condition, setCondition] = useState(CONDITIONS[0])
+  const [category, setCategory] = useState<string>(CATEGORIES[0])
+  const [condition, setCondition] = useState<string>(CONDITIONS[0])
   const [currentPhotoUrl, setCurrentPhotoUrl] = useState<string | null>(null)
   const [photoFile, setPhotoFile] = useState<File | null>(null)
   const [ownerId, setOwnerId] = useState<string | null>(null)
@@ -86,10 +88,7 @@ export default function EditItemPage() {
         return
       }
 
-      const { data: publicUrlData } = supabase.storage
-        .from('item-photos')
-        .getPublicUrl(filePath)
-
+      const { data: publicUrlData } = supabase.storage.from('item-photos').getPublicUrl(filePath)
       photoUrl = publicUrlData.publicUrl
     }
 
@@ -115,118 +114,114 @@ export default function EditItemPage() {
   }
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>
+    return <div className="flex min-h-screen items-center justify-center text-body-mid">Loading...</div>
   }
 
   return (
-    <div className="min-h-screen px-8 py-10 max-w-lg mx-auto" style={{ background: '#FFE9D6' }}>
-      <h1 className="text-3xl font-bold mb-2" style={{ color: '#7C2D12' }}>Edit listing</h1>
-      <p className="mb-8 text-base" style={{ color: '#9A3412' }}>
-        {listingType === 'offer' ? 'Update the details of what you\'re lending' : 'Update what you\'re looking for'}
-      </p>
+    <div className="min-h-screen">
+      <AppHeader />
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Title</label>
-          <input
-            id="title"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-            style={{ border: '1px solid #FED7AA' }}
-          />
-        </div>
+      <div className="mx-auto max-w-lg px-8 py-10">
+        <h1 className="text-3xl font-medium text-ink">Edit listing</h1>
+        <p className="mt-1.5 text-base text-body">
+          {listingType === 'offer' ? "Update the details of what you're lending" : "Update what you're looking for"}
+        </p>
 
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Description (optional)</label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-            className="w-full rounded-2xl bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-            style={{ border: '1px solid #FED7AA' }}
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-5">
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="title">Title</Label>
+            <Input
+              id="title"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              className="h-11 rounded-sm border-ink px-4 text-base"
+            />
+          </div>
 
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Category</label>
-          <select
-            id="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-            style={{ border: '1px solid #FED7AA' }}
-          >
-            {CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-        </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="description">Description (optional)</Label>
+            <Textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+              className="rounded-sm border-ink px-4 py-3 text-base"
+            />
+          </div>
 
-        {listingType === 'offer' && (
-          <>
-            <div>
-              <label htmlFor="condition" className="block text-sm font-medium mb-1.5" style={{ color: '#9A3412' }}>Condition</label>
-              <select
-                id="condition"
-                value={condition}
-                onChange={(e) => setCondition(e.target.value)}
-                className="w-full rounded-full bg-white px-6 py-3.5 text-base focus:outline-none focus:ring-2"
-                style={{ border: '1px solid #FED7AA' }}
-              >
-                {CONDITIONS.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-            </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="category">Category</Label>
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className={selectClass}
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            {currentPhotoUrl && !photoFile && (
-              <div className="rounded-xl overflow-hidden h-32 w-32">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={currentPhotoUrl} alt={title} className="w-full h-full object-cover" />
+          {listingType === 'offer' && (
+            <>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="condition">Condition</Label>
+                <select
+                  id="condition"
+                  value={condition}
+                  onChange={(e) => setCondition(e.target.value)}
+                  className={selectClass}
+                >
+                  {CONDITIONS.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
               </div>
-            )}
 
-            <div>
-              <label htmlFor="photo" className="block text-base mb-2" style={{ color: '#9A3412' }}>
-                {currentPhotoUrl ? 'Replace photo (optional)' : 'Photo (optional)'}
-              </label>
-              <input
-                id="photo"
-                type="file"
-                accept="image/*"
-                onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
-                className="text-base file:cursor-pointer file:mr-3 file:rounded-full file:border-0 file:bg-white file:px-5 file:py-2.5 file:text-sm file:font-medium"
-                style={{ color: '#9A3412' }}
-              />
-            </div>
-          </>
-        )}
+              {currentPhotoUrl && !photoFile && (
+                <div className="h-32 w-32 overflow-hidden rounded-sm">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={currentPhotoUrl} alt={title} className="h-full w-full object-cover" />
+                </div>
+              )}
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="photo">{currentPhotoUrl ? 'Replace photo (optional)' : 'Photo (optional)'}</Label>
+                <input
+                  id="photo"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
+                  className="text-sm text-body file:mr-3 file:cursor-pointer file:rounded-sm file:border file:border-ink file:bg-canvas file:px-4 file:py-2 file:text-sm file:font-medium file:text-ink"
+                />
+              </div>
+            </>
+          )}
 
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={() => router.push(`/item/${id}`)}
-            className="flex-1 rounded-full py-3.5 text-base font-medium cursor-pointer"
-            style={{ backgroundColor: 'white', color: '#9A3412', border: '1px solid #FED7AA' }}
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={saving}
-            className="flex-1 rounded-full text-white py-3.5 text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-            style={{ backgroundColor: '#EA580C' }}
-          >
-            {saving ? 'Saving...' : 'Save changes'}
-          </button>
-        </div>
-      </form>
+          {error && <p className="text-sm text-destructive">{error}</p>}
+
+          <div className="flex gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.push(`/item/${id}`)}
+              className="h-12 flex-1 cursor-pointer justify-center text-base"
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={saving} className="h-12 flex-1 cursor-pointer justify-center text-base">
+              {saving ? 'Saving...' : 'Save changes'}
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }
