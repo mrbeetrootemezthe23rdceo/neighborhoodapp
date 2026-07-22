@@ -9,7 +9,8 @@ A neighborhood tool-sharing marketplace — residents list tools and equipment t
 The demo is seeded with fake residents so it's populated with real listings out of the box. Sign up for your own account, or log in as one of the seeded residents:
 
 | Email | Password |
-|test1234@gmail.com|123456|
+| --- | --- |
+| test1234@gmail.com | 123456 |
 | jane@example.com | password123 |
 | mark@example.com | password123 |
 | priya@example.com | password123 |
